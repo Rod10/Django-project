@@ -2,11 +2,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
+from forms import EmailForm
+from models import Email
 
 
 def homepage(request):
-    return render(request=request,
-                  template_name='personal/home.html')
+    if request.method == 'POST':
+        form = EmailForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+
+    form = EmailForm()
+    return render(request,
+                  'personal/home.html',
+                  {'form': form})
 
 
 def register(request):

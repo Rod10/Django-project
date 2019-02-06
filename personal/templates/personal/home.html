@@ -1,5 +1,28 @@
 {% extends "personal/header.html" %}
 
 {% block content %}
-    <p>Bonjour</p>
+    {% if user.is_authenticated %}
+        <p>bonjour {{ user.username }}</p>
+        {% if user.email %}
+            <p>Votre email : {{ user.email }}</p>
+            {% else %}
+            <p>Vous n'avez pas d'email enregistrer</p>
+        {%  endif %}
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Modifier votre email</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                  <form method="POST">
+                      {% csrf_token %}
+                      {{ form }}
+                      <button type="submit" class="btn btn-primary">Sauvegarder votre email</button>
+                  </form>
+            </div>
+            </div>
+        {% else %}
+            <p>Vous n'etes pas connecter</p>
+    {% endif %}
+
+
 {% endblock %}

@@ -1,6 +1,5 @@
 from django import forms
 from models import Email
-from django.contrib.auth.models import User
 
 
 class EmailForm(forms.ModelForm):

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
@@ -11,6 +12,8 @@ def homepage(request):
         form = EmailForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            s = u'Votre email a bien été changer'.encode('utf-8')
+            messages.success(request, s)
 
     form = EmailForm()
     return render(request,
@@ -47,6 +50,7 @@ def logout_request(request):
 
 
 def login_request(request):
+    error = ''
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -55,12 +59,12 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, "vous etez bien connecter")
+                messages.info(request, "Connexion avec succes")
                 return redirect('main:homepage')
             else:
-                return messages.error(request, "le nom d'utilisateur ou le mot de passe sont incorrects")
+                messages.error(request, "le nom d'utilisateur ou le mot de passe sont incorrects")
         else:
-            return messages.error(request, "le nom d'utilisateur ou le mot de passe sont incorrects")
+            messages.error(request, "le nom d'utilisateur ou le mot de passe sont incorrects")
 
     form = AuthenticationForm()
     return render(request,
